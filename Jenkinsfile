@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'votre-dockerhub/mon-app'
+        DOCKER_IMAGE = 'mahdi02ch/tp3-devops'
     }
 
     stages {
         stage('Cloner le dépôt') {
             steps {
-                git 'https://github.com/ton-user/mon-app.git'
+                git "https://github.com/cap-mahdi/basic-node-app"
             }
         }
 
