@@ -40,9 +40,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} \
-                        --set image.repository=${DOCKER_IMAGE} \
-                        --set image.tag=${IMAGE_TAG}
+                        helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} 
                     """
                 }
             }
