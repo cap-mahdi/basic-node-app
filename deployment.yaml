@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: basic-node-app
-          image: mahdi02ch/tp3-devops:latest  # Use your actual Docker image name
+          image: mahdi02ch/tp3-devops:latest  
           ports:
             - containerPort: 3000

@@ -3,41 +3,47 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'mahdi02ch/tp3-devops'
+        IMAGE_TAG = 'latest'
+        HELM_RELEASE_NAME = 'basic-node-app'
+        HELM_CHART_PATH = './mon-app'
     }
 
     stages {
         stage('Cloner le dépôt') {
             steps {
-                git branch: 'main', url: 'https://github.com/cap-mahdi/basic-node-app.git'
+                git url: 'https://github.com/cap-mahdi/basic-node-app.git', branch: 'main'
             }
         }
 
         stage('Construire l\'image Docker') {
             steps {
                 script {
-                    sh "docker build -t $DOCKER_IMAGE ."
+                    sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
                 }
             }
         }
 
         stage('Pousser l\'image Docker') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_TOKEN')]) {
-                    script {
+                script {
+                    withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_TOKEN')]) {
                         sh """
-                            echo "$DOCKER_TOKEN" | docker login -u mahdi02ch --password-stdin
-                            docker push $DOCKER_IMAGE
+                            echo "${DOCKER_TOKEN}" | docker login -u mahdi02ch --password-stdin
+                            docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
                         """
                     }
                 }
             }
         }
 
-        stage('Déployer sur Kubernetes') {
+        stage('Déployer avec Helm') {
             steps {
                 script {
-                    sh 'minikube kubectl -- apply -f deployment.yaml'
-                    sh 'minikube kubectl -- apply -f service.yaml'
+                    sh """
+                        helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} \
+                        --set image.repository=${DOCKER_IMAGE} \
+                        --set image.tag=${IMAGE_TAG}
+                    """
                 }
             }
         }
