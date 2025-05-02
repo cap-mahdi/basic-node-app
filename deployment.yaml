@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basic-node-app
+  labels:
+    app: basic-node-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: basic-node-app
+  template:
+    metadata:
+      labels:
+        app: basic-node-app
+    spec:
+      containers:
+        - name: basic-node-app
+          image: mahdi02ch/tp3-devops:latest  # Use your actual Docker image name
+          ports:
+            - containerPort: 3000
