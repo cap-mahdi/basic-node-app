@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Cloner le dépôt') {
             steps {
-                git "https://github.com/cap-mahdi/basic-node-app"
+                git branch "main", url: "https://github.com/cap-mahdi/basic-node-app"
             }
         }
 
