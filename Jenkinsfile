@@ -22,7 +22,7 @@ pipeline {
 
         stage('Pousser l\'image Docker') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-creds-id', variable: 'DOCKER_TOKEN')]) {
+                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_TOKEN')]) {
                     script {
                         sh """
                             echo "$DOCKER_TOKEN" | docker login -u votre-dockerhub --password-stdin
